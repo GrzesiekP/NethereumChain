@@ -5,21 +5,15 @@ namespace NethereumChain.Core.Contracts
 {
     public class BaseContract
     {
-        private string _address;
-        private string _ABI;
         public Contract Contract { get; }
 
-        public BaseContract(string address, string contractLocation, Web3 web3)
+        public BaseContract(string address, Web3 web3)
         {
             const string abiFile = @"solc\ABI\SupplyChainAbi.txt";
 
-            _ABI = GetAbiFromFile(abiFile);
+            var abi = GetAbiFromFile(abiFile);
 
-            _address = address;
-
-            //_ABI = GetAbiFromFile(contractLocation);
-
-            Contract = web3.Eth.GetContract(_ABI, _address);
+            Contract = web3.Eth.GetContract(abi, address);
         }
 
         private string GetAbiFromFile(string abiFileLocation)

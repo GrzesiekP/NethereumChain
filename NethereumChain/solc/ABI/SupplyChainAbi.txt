@@ -1,0 +1,4 @@
+
+======= .\eth\contracts\SupplyChain.sol:SupplyChain =======
+Contract JSON ABI 
+[{"constant":false,"inputs":[{"name":"locationName","type":"string"}],"name":"AddNewLocation","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"GetChainCount","outputs":[{"name":"","type":"uint16"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"}],"name":"ChainDictionary","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"locationName","type":"string"}],"name":"GetLocation","outputs":[{"name":"","type":"uint256"},{"name":"","type":"uint256"},{"name":"","type":"string"},{"name":"","type":"string"},{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"}]

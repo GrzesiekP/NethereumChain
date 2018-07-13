@@ -9,8 +9,15 @@ namespace NethereumChain.Test
         [Test]
         public void ShouldReadUrl()
         {
-            var hostFromConfig = ConfigurationProvider.BlockchainAddress;
+            var hostFromConfig = AppConfigurationProvider.BlockchainAddress;
             Assert.False(string.IsNullOrWhiteSpace(hostFromConfig));
+        }
+
+        [Test]
+        public void ShouldReadContractAddress()
+        {
+            var addressFromConfig = AppConfigurationProvider.ContractAddress("SupplyChain");
+            Assert.False(string.IsNullOrWhiteSpace(addressFromConfig));
         }
     }
 }
