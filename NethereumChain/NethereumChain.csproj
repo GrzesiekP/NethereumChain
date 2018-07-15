@@ -21,7 +21,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\NethereumChain.Core\NethereumChain.Core.csproj" />
-    <ProjectReference Include="..\NethereumChain.Services\NethereumChain.Services.csproj" />
   </ItemGroup>
 
   <ItemGroup>
