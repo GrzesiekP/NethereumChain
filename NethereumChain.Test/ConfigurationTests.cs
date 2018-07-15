@@ -1,5 +1,4 @@
-﻿using NethereumChain;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
 namespace NethereumChain.Test
 {

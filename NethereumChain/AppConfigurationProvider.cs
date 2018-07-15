@@ -20,7 +20,20 @@ namespace NethereumChain
         public static string ContractAddress(string contractName) => 
             Configuration[$"Blockchain:Contracts:{contractName}"];
 
-        public static string BlockchainAddress =>
-            $"http://{Configuration["Blockchain:Network:Host"]}:{Configuration["Blockchain:Network:Port"]}";
+        private static string GetBlockchainAddress()
+        {
+            var port = Configuration["Blockchain:Network:Port"].ToString();
+            var host = Configuration["Blockchain:Network:Host"];
+            var protocol = Configuration["Blockchain:Network:Protocol"];
+
+            return string.IsNullOrWhiteSpace(port) ?
+                $"{protocol}://{host}" :
+                $"{protocol}://{host}:{port}";
+        }
+
+        public static string BlockchainAddress => GetBlockchainAddress();
+
+        public static string InfuraApiAddress 
+            => $"{Configuration["Blockchain:Infura:NetworkAddress"]}/{Configuration["Blockchain:Infura:ApiKey"]}";
     }
 }

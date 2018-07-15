@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using NUnit.Framework;
 using NethereumChain.Core;
 using NethereumChain.Core.Contracts;
@@ -38,38 +37,6 @@ namespace NethereumChain.Test
             var scContract = chain.SupplyChainContract;
             
             Assert.NotNull(scContract);
-        }
-
-        [Test]
-        [Category("Blockchain")]
-        public async Task AddAndGetLocationToSupplyChain()
-        {
-            var locationToAdd = GetSampleLocationModel();
-            var errorMessage = _contract.AddNewLocation(USER_ADDRESS, GAS, VALUE, locationToAdd);
-
-            Assert.Null(errorMessage);
-
-            var getLocationResult = await _contract.GetLocation(locationToAdd.LocationName);
-
-            Assert.IsNull(errorMessage);
-            Assert.AreEqual(getLocationResult.LocationName, locationToAdd.LocationName);
-        }
-
-        [Test]
-        [Category("Blockchain")]
-        public void AddLocationAndCountChain()
-        {
-            var countBeforeAdd = _contract.GetChainCount().Result;
-
-            var locationToAdd = GetSampleLocationModel();
-            var errorMessage = _contract.AddNewLocation(USER_ADDRESS, GAS, VALUE, locationToAdd);
-
-            Assert.Null(errorMessage);
-
-            var countAfterAdd = _contract.GetChainCount().Result;
-
-            Assert.True(countAfterAdd > 0);
-            Assert.True(countAfterAdd == countBeforeAdd + 1);
         }
     }
 }

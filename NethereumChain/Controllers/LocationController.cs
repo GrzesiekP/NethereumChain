@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.DataProtection.AzureStorage;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NethereumChain.Core;
@@ -16,8 +12,10 @@ namespace NethereumChain.Controllers
     public class LocationController : Controller
     {
         private readonly SupplyContractRepository _repository = new SupplyBlockchain(
-            AppConfigurationProvider.BlockchainAddress,
-            AppConfigurationProvider.ContractAddress("SupplyChain")).SupplyChainContract;
+            AppConfigurationProvider.InfuraApiAddress,
+            AppConfigurationProvider.ContractAddress("SupplyChain"))
+            .SupplyChainContract;
+
 
         // GET: api/Location
         [HttpGet]
@@ -39,19 +37,22 @@ namespace NethereumChain.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]CreateLocationCommand createLocation)
         {
-            var result = _repository.AddNewLocation(
+            var result = await _repository.AddNewLocation(
                 createLocation.UserAddress,
+                createLocation.UserPrivateKey,
                 createLocation.Gas,
                 createLocation.Value,
                 new Location {LocationName = createLocation.LocationName}
             );
 
-            if (result != null)
+            if (result == null)
                 return StatusCode(StatusCodes.Status500InternalServerError);
 
-            var createdLocation = await _repository.GetLocation(createLocation.LocationName);
+            return NoContent();
 
-            return CreatedAtRoute("Get", new {locationName = createdLocation.LocationName}, createdLocation);
+            //submit for new location event?
+           // var createdLocation = await _repository.GetLocation(createLocation.LocationName);
+            //return CreatedAtRoute("Get", new {locationName = createdLocation.LocationName}, createdLocation);
         }
 
         // DELETE: api/ApiWithActions/5

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace NethereumChain.Core.Logging
+﻿namespace NethereumChain.Core.Logging
 {
     public static class Logger
     {

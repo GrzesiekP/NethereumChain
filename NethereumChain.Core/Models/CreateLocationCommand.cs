@@ -10,6 +10,8 @@ namespace NethereumChain.Core.Models
         [Required]
         public string UserAddress { get; set; }
         [Required]
+        public string UserPrivateKey { get; set; }
+        [Required]
         public int Gas { get; set; }
         [Required]
         public int Value { get; set; }

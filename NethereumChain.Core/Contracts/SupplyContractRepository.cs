@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Numerics;
 using System.Threading.Tasks;
 using Nethereum.Contracts;
-using Nethereum.Hex.HexTypes;
 using Nethereum.Web3;
 using NethereumChain.Core.Logging;
 using NethereumChain.Core.Models;
@@ -13,16 +11,16 @@ namespace NethereumChain.Core.Contracts
     public class SupplyContractRepository
     {
         private readonly Contract _contract;
+        private readonly Web3 _web3;
 
         internal SupplyContractRepository(string address, Web3 web3)
         {
+            _web3 = web3;
             _contract = new BaseContract(address, web3).Contract;
         }
 
-        public async Task<int> GetChainCount()
-        {
-            return await _contract.GetFunction("GetChainCount").CallAsync<int>();
-        }
+        public async Task<int> GetChainCount() 
+            => await _contract.GetFunction("GetChainCount").CallAsync<int>();
 
         public async Task<Location> GetLocation(string locationName)
         {
@@ -69,21 +67,24 @@ namespace NethereumChain.Core.Contracts
             return locations;
         }
 
-        public string AddNewLocation(string userAddress, int gas, int value, Location location)
+        public async Task<string> AddNewLocation(string userAddress, string privateKey, int gasLimit, int amount, Location location)
         {
             try
             {
-                var gasHex = new HexBigInteger(new BigInteger(400000));
-                var valueHex = new HexBigInteger(new BigInteger(0));
-                var addLocationFunction = _contract.GetFunction("AddNewLocation")
-                    .SendTransactionAsync(userAddress, gasHex, valueHex, location.LocationName);
-                addLocationFunction.Wait();
-                return null;
+                var addLocationFunction = _contract.GetFunction("AddNewLocation");
+                var data = addLocationFunction.GetData(location.LocationName);
+
+                var txCount = await _web3.Eth.Transactions.GetTransactionCount.SendRequestAsync(userAddress).ConfigureAwait(false);
+
+                var encoded = Web3.OfflineTransactionSigner.SignTransaction(privateKey, _contract.Address, amount, txCount.Value, 1000000000000L, gasLimit, data);
+                var transaction = await _web3.Eth.Transactions.SendRawTransaction.SendRequestAsync(encoded).ConfigureAwait(false);
+
+                return transaction;
             }
             catch (Exception e)
             {
                 Logger.Error(e.Message);
-                return e.Message;
+                return null;
             }
         }
     }
