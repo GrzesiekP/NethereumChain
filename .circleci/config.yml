@@ -1,0 +1,28 @@
+version: 2
+jobs:
+  info:
+    docker:
+      - image: microsoft/aspnetcore-build:latest
+    steps:
+      - checkout
+      - run:
+          name: dotnet-version
+          command: 'dotnet --info'
+  build:
+    docker:
+      - image: microsoft/aspnetcore-build:latest
+    steps:
+      - checkout
+      - run:
+          name: restore_nuget
+          command: 'dotnet restore NethereumChain.sln'
+      - run:
+          name: build
+          command: 'dotnet build NethereumChain.sln'
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - info
+      - build
