@@ -86,6 +86,6 @@ namespace NethereumChain.Controllers
 
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id) => BadRequest("You cannot delete from blockchain");
+        public IActionResult Delete(int id) => StatusCode(StatusCodes.Status405MethodNotAllowed);
     }
 }
