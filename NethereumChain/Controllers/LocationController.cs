@@ -22,12 +22,8 @@ namespace NethereumChain.Controllers
             AppConfigurationProvider.ContractAddress("SupplyChain"))
             .SupplyChainContract;
 
-        public LocationController(IMemoryCache cache)
-        {
-            _cache = cache;
-        }
+        public LocationController(IMemoryCache cache) => _cache = cache;
 
-        // GET: api/Location
         [HttpGet]
         public async Task<IActionResult> Get()
         {
@@ -43,7 +39,6 @@ namespace NethereumChain.Controllers
             return Ok(locations);
         }
 
-        // GET: api/Location/5
         [HttpGet("{locationName}", Name = "Get")]
         public async Task<IActionResult> Get(string locationName)
         {
@@ -63,10 +58,12 @@ namespace NethereumChain.Controllers
             return Ok(location);
         }
         
-        // POST: api/Location
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]CreateLocationCommand createLocation)
         {
+            if (createLocation == null)
+                return BadRequest();
+
             var result = await _repository.AddNewLocation(
                 createLocation.UserAddress,
                 createLocation.UserPrivateKey,
@@ -84,7 +81,6 @@ namespace NethereumChain.Controllers
             //return CreatedAtRoute("Get", new {locationName = createdLocation.LocationName}, createdLocation);
         }
 
-        // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
         public IActionResult Delete(int id) => StatusCode(StatusCodes.Status405MethodNotAllowed);
     }

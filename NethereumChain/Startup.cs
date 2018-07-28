@@ -40,7 +40,11 @@ namespace NethereumChain
             if (env.IsDevelopment())
                 app.UseDeveloperExceptionPage();
 
-            app.UseCors(opt => opt.AllowAnyOrigin());
+            app.UseCors(opt => opt
+            .AllowAnyOrigin()
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials());
 
             app.UseMvc();
         }
