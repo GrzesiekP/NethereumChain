@@ -9,10 +9,7 @@ namespace NethereumChain
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
+        public Startup(IConfiguration configuration) => Configuration = configuration;
 
         public IConfiguration Configuration { get; }
 
@@ -23,6 +20,8 @@ namespace NethereumChain
             {
                 setupAction.ReturnHttpNotAcceptable = true;
             });
+
+            services.AddCors();
 
             services.AddApiVersioning(cfg =>
             {
@@ -39,9 +38,9 @@ namespace NethereumChain
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
-            {
                 app.UseDeveloperExceptionPage();
-            }
+
+            app.UseCors(opt => opt.AllowAnyOrigin());
 
             app.UseMvc();
         }
