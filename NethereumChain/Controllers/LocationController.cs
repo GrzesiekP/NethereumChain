@@ -61,7 +61,7 @@ namespace NethereumChain.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]CreateLocationCommand createLocation)
         {
-            if (createLocation == null)
+            if (String.IsNullOrWhiteSpace(createLocation?.LocationName))
                 return BadRequest();
 
             var result = await _repository.AddNewLocation(
@@ -72,13 +72,9 @@ namespace NethereumChain.Controllers
                 new Location {LocationName = createLocation.LocationName}
             );
 
-            return result == null ?
-                StatusCode(StatusCodes.Status500InternalServerError) : 
-                NoContent();
-
-            //submit for new location event?
-           // var createdLocation = await _repository.GetLocation(createLocation.LocationName);
-            //return CreatedAtRoute("Get", new {locationName = createdLocation.LocationName}, createdLocation);
+            return result == null ? 
+                (IActionResult) StatusCode(StatusCodes.Status500InternalServerError) : 
+                Ok(result);
         }
 
         [HttpDelete("{id}")]
