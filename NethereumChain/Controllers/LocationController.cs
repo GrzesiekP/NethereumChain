@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
-using NethereumChain.Core;
 using NethereumChain.Core.Contracts;
 using NethereumChain.Core.Models;
 
@@ -16,13 +15,13 @@ namespace NethereumChain.Controllers
     public class LocationController : Controller
     {
         private readonly IMemoryCache _cache;
+        private readonly ISupplyContractRepository _repository;
 
-        private readonly SupplyContractRepository _repository = new SupplyBlockchain(
-            AppConfigurationProvider.InfuraApiAddress,
-            AppConfigurationProvider.ContractAddress("SupplyChain"))
-            .SupplyChainContract;
-
-        public LocationController(IMemoryCache cache) => _cache = cache;
+        public LocationController(IMemoryCache cache, ISupplyContractRepository repository)
+        {
+            _cache = cache;
+            _repository = repository;
+        } 
 
         [HttpGet]
         public async Task<IActionResult> Get()
@@ -61,7 +60,7 @@ namespace NethereumChain.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]CreateLocationCommand createLocation)
         {
-            if (String.IsNullOrWhiteSpace(createLocation?.LocationName))
+            if (string.IsNullOrWhiteSpace(createLocation?.LocationName))
                 return BadRequest();
 
             var result = await _repository.AddNewLocation(

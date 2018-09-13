@@ -1,6 +1,7 @@
+using Nethereum.Web3;
 using NUnit.Framework;
-using NethereumChain.Core;
 using NethereumChain.Core.Contracts;
+using NethereumChain.Core.Logging;
 using NethereumChain.Core.Models;
 
 namespace NethereumChain.Test
@@ -10,13 +11,22 @@ namespace NethereumChain.Test
     {
         private const string USER_ADDRESS = "0xD51DD787c49d8f2dC64b91AB12E29ED9d4721b10";
         private const string SUPPLY_CHAIN_CONTRACT_ADDRESS = "0x6ac0f5f416ecb32cd14db9df5f0ca11f41b5c625";
+        private const string INFURA_API_ADDRESS = "https://ropsten.infura.io/4cOog5xqs8S0jblMEOaA";
         private const int GAS = 400000;
         private const int VALUE = 0;
+
+        private SupplyContractRepository _repository;
+
+        private void Setup()
+        {
+            var web3 = new Web3(INFURA_API_ADDRESS);
+            _repository = new SupplyContractRepository(SUPPLY_CHAIN_CONTRACT_ADDRESS, web3, new NethereumLogger());
+        }
 
         private Location GetSampleLocationModel(int id = 0)
         {
             id = id == 0 ?
-                _contract.GetChainCount().Result :
+                _repository.GetChainCount().Result :
                 id;
 
             return new Location
@@ -25,18 +35,13 @@ namespace NethereumChain.Test
             };
         }
 
-        private readonly SupplyContractRepository _contract =
-            new SupplyBlockchain(AppConfigurationProvider.BlockchainAddress, SUPPLY_CHAIN_CONTRACT_ADDRESS)
-            .SupplyChainContract;
+
 
         [Test]
         [Category("Blockchain")]
-        public void AccessBlockchainSupplyChainContract()
+        public void Test1()
         { 
-            var chain = new SupplyBlockchain(AppConfigurationProvider.BlockchainAddress, SUPPLY_CHAIN_CONTRACT_ADDRESS);
-            var scContract = chain.SupplyChainContract;
-            
-            Assert.NotNull(scContract);
+
         }
     }
 }

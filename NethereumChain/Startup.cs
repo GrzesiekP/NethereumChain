@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System.IO;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Mvc.Versioning;
+using NethereumChain.Core.Contracts;
 using NethereumChain.Core.Logging;
 using Newtonsoft.Json.Serialization;
 
@@ -27,6 +29,7 @@ namespace NethereumChain
              );
 
             services.AddScoped<INethereumLogger, NethereumLogger>();
+            services.AddScoped<ISupplyContractRepository, SupplyContractRepository>();
 
             services.AddCors();
 
@@ -44,6 +47,8 @@ namespace NethereumChain
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            AppConfigProvider.Initialize(Configuration);
+
             if (env.IsDevelopment())
                 app.UseDeveloperExceptionPage();
 

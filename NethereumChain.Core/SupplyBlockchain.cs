@@ -1,5 +1,6 @@
 ﻿using Nethereum.Web3;
 using NethereumChain.Core.Contracts;
+using NethereumChain.Core.Logging;
 
 namespace NethereumChain.Core
 {
@@ -10,10 +11,10 @@ namespace NethereumChain.Core
 
         public SupplyContractRepository SupplyChainContract { get; private set; }
 
-        public SupplyBlockchain(string url, string address)
+        public SupplyBlockchain(string url, string address, INethereumLogger nethereumLogger)
         {
             _url = url;
-            SupplyChainContract = new SupplyContractRepository(address, Web3Api);
+            SupplyChainContract = new SupplyContractRepository(address, Web3Api, nethereumLogger);
         }
     }
 }

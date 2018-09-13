@@ -8,15 +8,26 @@ using NethereumChain.Core.Models;
 
 namespace NethereumChain.Core.Contracts
 {
-    public class SupplyContractRepository
+    public class SupplyContractRepository : ISupplyContractRepository
     {
         private readonly Contract _contract;
         private readonly Web3 _web3;
+        private readonly INethereumLogger _nethereumLogger;
 
-        internal SupplyContractRepository(string address, Web3 web3)
+        public SupplyContractRepository(INethereumLogger nethereumLogger)
+        {
+            _nethereumLogger = nethereumLogger;
+
+            var address = AppConfigProvider.ContractAddress;
+            _web3 = new Web3(AppConfigProvider.InfuraApiAddress);
+            _contract = new BaseContract(address, _web3).Contract;
+        }
+
+        public SupplyContractRepository(string address, Web3 web3, INethereumLogger nethereumLogger)
         {
             _web3 = web3;
             _contract = new BaseContract(address, web3).Contract;
+            _nethereumLogger = nethereumLogger;
         }
 
         public async Task<int> GetChainCount() 
@@ -35,7 +46,7 @@ namespace NethereumChain.Core.Contracts
             }
             catch (Exception e)
             {
-                Logger.Error(e.Message);
+                _nethereumLogger.Error(e.Message);
                 return null;
             }
         }
@@ -59,7 +70,7 @@ namespace NethereumChain.Core.Contracts
                 }
                 catch (Exception e)
                 {
-                    Logger.Error(e.Message);
+                    _nethereumLogger.Error(e.Message);
                     return null;
                 }
             }
@@ -83,7 +94,7 @@ namespace NethereumChain.Core.Contracts
             }
             catch (Exception e)
             {
-                Logger.Error(e.Message);
+                _nethereumLogger.Error(e.Message);
                 return null;
             }
         }
