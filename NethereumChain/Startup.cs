@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Mvc.Versioning;
+using NethereumChain.Core.Logging;
+using Newtonsoft.Json.Serialization;
 
 namespace NethereumChain
 {
@@ -17,9 +19,14 @@ namespace NethereumChain
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc(setupAction =>
-            {
-                setupAction.ReturnHttpNotAcceptable = true;
-            });
+                {
+                    setupAction.ReturnHttpNotAcceptable = true;
+                })
+                .AddJsonOptions(opt => opt.SerializerSettings.ContractResolver =
+                    new CamelCasePropertyNamesContractResolver()
+             );
+
+            services.AddScoped<INethereumLogger, NethereumLogger>();
 
             services.AddCors();
 
