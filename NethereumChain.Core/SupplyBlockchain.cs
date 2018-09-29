@@ -9,7 +9,7 @@ namespace NethereumChain.Core
         private readonly string _url;
         private Web3 Web3Api => new Web3(_url);
 
-        public SupplyContractRepository SupplyChainContract { get; private set; }
+        public SupplyContractRepository SupplyChainContract { get; }
 
         public SupplyBlockchain(string url, string address, INethereumLogger nethereumLogger)
         {
