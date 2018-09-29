@@ -1,5 +1,5 @@
 # NethereumChain 
-https://nethereumchain.azurewebsites.net/api/location
+https://nethereumchain.azurewebsites.net/api/v1/location
 
 ## Prerequisites:
 1. Ganache
