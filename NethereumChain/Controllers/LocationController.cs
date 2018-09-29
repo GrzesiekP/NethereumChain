@@ -1,8 +1,4 @@
 ﻿using System;
-<<<<<<< Updated upstream
-=======
-using System.Collections.Generic;
->>>>>>> Stashed changes
 using System.Collections.Immutable;
 using System.Net;
 using System.Threading.Tasks;
