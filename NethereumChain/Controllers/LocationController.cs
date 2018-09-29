@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -19,14 +19,14 @@ namespace NethereumChain.Controllers
 
         public LocationController(IMemoryCache cache, ISupplyContractRepository repository)
         {
-            _cache = cache;
-            _repository = repository;
+            _cache = cache ?? throw new ArgumentNullException(nameof(cache));
+            _repository = repository ?? throw new ArgumentNullException(nameof(repository));
         } 
 
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            if (_cache.TryGetValue("Locations", out List<Location> locations))
+            if (_cache.TryGetValue("Locations", out ImmutableList<Location> locations))
                 return StatusCode((int)HttpStatusCode.NotModified);
 
             locations = await _repository.GetAllLocations();
