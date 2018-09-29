@@ -17,11 +17,10 @@ namespace NethereumChain.Core.Contracts
 
         public SupplyContractRepository(INethereumLogger nethereumLogger)
         {
-            _nethereumLogger = nethereumLogger ?? throw new ArgumentNullException(nameof(nethereumLogger)); ;
-
+            _nethereumLogger = nethereumLogger ?? throw new ArgumentNullException(nameof(nethereumLogger));
+            
             var address = AppSettingsProvider.ContractAddress ?? throw new ArgumentNullException(nameof(AppSettingsProvider.ContractAddress));
             _web3 = new Web3(AppSettingsProvider.InfuraApiAddress);
-
             _contract = new BaseContract(address, _web3).Contract;
         }
 
