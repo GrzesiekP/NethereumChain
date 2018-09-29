@@ -1,5 +1,6 @@
 ﻿using NethereumChain.Core.Models;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Threading.Tasks;
 
 namespace NethereumChain.Core.Contracts
@@ -8,7 +9,7 @@ namespace NethereumChain.Core.Contracts
     {
         Task<int> GetChainCount();
         Task<Location> GetLocation(string locationName);
-        Task<List<Location>> GetAllLocations();
+        Task<ImmutableList<Location>> GetAllLocations();
         Task<string> AddNewLocation(string userAddress, string privateKey, int gasLimit, int amount, Location location);
     }
 }

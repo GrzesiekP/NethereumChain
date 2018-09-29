@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Threading.Tasks;
 using Nethereum.Contracts;
 using Nethereum.Web3;
@@ -16,18 +16,20 @@ namespace NethereumChain.Core.Contracts
 
         public SupplyContractRepository(INethereumLogger nethereumLogger)
         {
-            _nethereumLogger = nethereumLogger;
+            _nethereumLogger = nethereumLogger ?? throw new ArgumentNullException(nameof(nethereumLogger)); ;
 
-            var address = AppConfigProvider.ContractAddress;
+            var address = AppConfigProvider.ContractAddress ?? throw new ArgumentNullException(nameof(AppConfigProvider.ContractAddress));
             _web3 = new Web3(AppConfigProvider.InfuraApiAddress);
+
             _contract = new BaseContract(address, _web3).Contract;
         }
 
         public SupplyContractRepository(string address, Web3 web3, INethereumLogger nethereumLogger)
         {
-            _web3 = web3;
+            _web3 = web3 ?? throw new ArgumentNullException(nameof(web3));
             _contract = new BaseContract(address, web3).Contract;
-            _nethereumLogger = nethereumLogger;
+
+            _nethereumLogger = nethereumLogger ?? throw new ArgumentNullException(nameof(nethereumLogger));
         }
 
         public async Task<int> GetChainCount() 
@@ -35,6 +37,12 @@ namespace NethereumChain.Core.Contracts
 
         public async Task<Location> GetLocation(string locationName)
         {
+            if (string.IsNullOrEmpty(locationName))
+            {
+                _nethereumLogger.Error("Location name is empty.");
+                return null;
+            }
+
             try
             {
                 var getLocationFunction = _contract.GetFunction("GetLocation");
@@ -51,9 +59,9 @@ namespace NethereumChain.Core.Contracts
             }
         }
 
-        public async Task<List<Location>> GetAllLocations()
+        public async Task<ImmutableList<Location>> GetAllLocations()
         {
-            var locations = new List<Location>();
+            var locations = ImmutableList.Create<Location>();
             var getLocationFunction = _contract.GetFunction("GetLocation");
 
             for (var i = 0; i <= GetChainCount().Result; i++)
@@ -66,7 +74,7 @@ namespace NethereumChain.Core.Contracts
                     var location = await getLocationFunction
                         .CallDeserializingToObjectAsync<Location>(locationName)
                         .ConfigureAwait(false);
-                    locations.Add(location);                    
+                    locations = locations.Add(location);                    
                 }
                 catch (Exception e)
                 {
