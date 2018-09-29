@@ -3,6 +3,7 @@ using System.Collections.Immutable;
 using System.Threading.Tasks;
 using Nethereum.Contracts;
 using Nethereum.Web3;
+using NethereumChain.Core.Configuration;
 using NethereumChain.Core.Logging;
 using NethereumChain.Core.Models;
 
@@ -18,8 +19,8 @@ namespace NethereumChain.Core.Contracts
         {
             _nethereumLogger = nethereumLogger ?? throw new ArgumentNullException(nameof(nethereumLogger)); ;
 
-            var address = AppConfigProvider.ContractAddress ?? throw new ArgumentNullException(nameof(AppConfigProvider.ContractAddress));
-            _web3 = new Web3(AppConfigProvider.InfuraApiAddress);
+            var address = AppSettingsProvider.ContractAddress ?? throw new ArgumentNullException(nameof(AppSettingsProvider.ContractAddress));
+            _web3 = new Web3(AppSettingsProvider.InfuraApiAddress);
 
             _contract = new BaseContract(address, _web3).Contract;
         }
