@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/GrzesiekP/NethereumChain.svg?style=svg)](https://circleci.com/gh/GrzesiekP/NethereumChain)
+
 # NethereumChain 
 https://nethereumchain.azurewebsites.net/api/v1/location
 
