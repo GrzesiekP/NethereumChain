@@ -1,6 +1,8 @@
 # NethereumChain 
 https://nethereumchain.azurewebsites.net/api/v1/location
 
+[Firebase deployed client](https://nethereumchainclient.firebaseapp.com/)
+
 ## Prerequisites:
 1. Ganache
 2. Truffle
