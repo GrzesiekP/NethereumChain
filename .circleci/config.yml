@@ -2,7 +2,7 @@ version: 2
 jobs:
   info:
     docker:
-      - image: microsoft/aspnetcore-build:latest
+      - image: microsoft/dotnet:2.1-sdk
     steps:
       - checkout
       - run:
@@ -10,7 +10,7 @@ jobs:
           command: 'dotnet --info'
   build:
     docker:
-      - image: microsoft/aspnetcore-build:latest
+      - image: microsoft/dotnet:2.1-sdk
     steps:
       - checkout
       - run:
